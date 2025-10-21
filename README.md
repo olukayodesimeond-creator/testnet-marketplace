@@ -1,3 +1,4 @@
+![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)
 # Testnet Marketplace
 
 **Project Concept**
