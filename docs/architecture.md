@@ -1,73 +1,54 @@
+# 🧩 Testnet Marketplace Architecture
 
-🧩 1. Core Idea
+## 1. Core Idea
 
 A Testnet Marketplace where:
 
-Users can buy and sell testnet tokens securely.
-
-They can also discover ongoing and upcoming testnets for farming or airdrops.
-
-The platform rewards participation and reputation growth.
-
-
+- Users can buy and sell testnet tokens securely.  
+- They can also discover ongoing and upcoming testnets for farming or airdrops.  
+- The platform rewards participation and reputation growth.  
 
 ---
 
-⚙️ 2. Updated Architecture Overview
+## ⚙️ 2. Updated Architecture Overview
 
-Layer	Description	Tools / Options
-
-Frontend (UI)	User interface for listings, wallet connection, dashboard	Next.js + TailwindCSS + Wagmi + RainbowKit + Base App + Rabby
-Smart Contracts	Handles listing, escrow, and trades	Solidity + Hardhat or Foundry
-Backend / Indexer	Tracks marketplace data, prices, and user activity	Node.js (Express) + PostgreSQL / MongoDB
-Blockchain Layer	Base chain for primary interactions + optional Monad testnet	Base Testnet / Sepolia / Monad
-Data Aggregation Layer	Aggregates live testnet data from APIs (Kaito, Zama, Airdrops.io, etc.)	Custom API endpoints
-Privacy Layer	FHE-enabled transactions using Zama’s fhevm	Zama AI SDK
-AI Layer (Optional)	Summarizes testnet projects, user patterns, and recommendations	Kaito API + OpenAI API
-
-
+| Layer | Description | Tools / Options |
+|-------|--------------|----------------|
+| **Frontend (UI)** | User interface for listings, wallet connection, dashboard | Next.js + TailwindCSS + Wagmi + RainbowKit + Base App + Rabby |
+| **Smart Contracts** | Handles listing, escrow, and trades | Solidity + Hardhat or Foundry |
+| **Backend / Indexer** | Tracks marketplace data, prices, and user activity | Node.js (Express) + PostgreSQL / MongoDB |
+| **Blockchain Layer** | Base chain for primary interactions + optional Monad testnet | Base Testnet / Sepolia / Monad |
+| **Data Aggregation Layer** | Aggregates live testnet data from APIs (Kaito, Zama, Airdrops.io, etc.) | Custom API endpoints |
+| **Privacy Layer** | FHE-enabled transactions using Zama’s fhevm | Zama AI SDK |
+| **AI Layer (Optional)** | Summarizes testnet projects, user patterns, and recommendations | Kaito API + OpenAI API |
 
 ---
 
-🧠 3. Wallet Integration
+## 🧠 3. Wallet Integration
 
 You’ll support three wallet types for flexibility and security:
 
-a. Base App (Base Wallet)
+### a. Base App (Base Wallet)
+- Default onboarding path for new users.  
+- Built-in fiat-to-crypto bridge.  
+- Native support for Base chain (main + testnet).  
 
-Default onboarding path for new users.
+### b. Rabby Wallet
+- For advanced Web3 users.  
+- One-click chain switching and better DApp connection.  
+- Perfect for multi-chain testnet hunters.  
 
-Built-in fiat-to-crypto bridge.
+### c. RainbowKit / Wagmi
+- Provides unified wallet connection logic.  
+- Easy integration with MetaMask, Coinbase Wallet, and others.  
+- Simplifies wallet authentication on frontend.  
 
-Native support for Base chain (main + testnet).
+**Example Wallet Setup Code:**
 
-
-b. Rabby Wallet
-
-For advanced Web3 users.
-
-One-click chain switching and better DApp connection.
-
-Perfect for multi-chain testnet hunters.
-
-
-c. RainbowKit / Wagmi
-
-Provides unified wallet connection logic.
-
-Easy integration with MetaMask, Coinbase Wallet, and others.
-
-Simplifies wallet authentication on frontend.
-
-
-Flow Example:
-
+```js
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { rabbyWallet, metaMaskWallet, baseWallet } from '@rainbow-me/rainbowkit/wallets';
-
-
----
-
+```
 🏗️ 4. Key Functional Modules
 
 a. User Module
@@ -76,7 +57,7 @@ Connect wallet (Base / Rabby / MetaMask)
 
 Profile setup + wallet verification
 
-XP, badges, on-chain rep
+XP, badges, on-chain reputation
 
 
 b. Marketplace
@@ -123,6 +104,8 @@ Protect user balances
 Perform verifiable encrypted operations
 
 
+Example Solidity Snippet:
+
 import "fhevm/lib/FHE.sol";
 
 uint256 encryptedPrice = FHE.encrypt(0.2 ether);
@@ -133,7 +116,7 @@ FHE.decrypt(encryptedPrice); // only contract can access
 
 🚀 6. MVP Rollout Plan
 
-Phase 1 (MVP):
+Phase 1 (MVP)
 
 UI (Next.js + Wagmi + Base/Rabby)
 
@@ -144,7 +127,7 @@ Backend (data + API)
 Basic testnet listing dashboard
 
 
-Phase 2:
+Phase 2
 
 Add Zama FHE privacy
 
@@ -153,7 +136,7 @@ Integrate AI testnet recommendations
 Launch user XP and reputation scoring
 
 
-Phase 3:
+Phase 3
 
 DAO governance + staking rewards
 
@@ -178,4 +161,17 @@ Bubble.io or Typedream for frontend
 Replit + ChatGPT for smart contract scaffolding
 
 Zama Sandbox for FHE simulation
-![1000093361](https://github.com/user-attachments/assets/5ff47cf2-b628-46b8-b1b6-7a491137cb0e)
+
+
+
+---
+
+🪙 Supported Wallets
+
+Base App
+
+Rabby Wallet
+
+MetaMask (via Wagmi/RainbowKit)
+
+Coinbase Wallet
