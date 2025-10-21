@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="1000093381" src="https://github.com/user-attachments/assets/5e3dd34f-9db3-4b2a-a07e-a1cdc4ebe94b" />
 # 🧩 Testnet Marketplace Architecture
 
 ## 1. Core Idea
