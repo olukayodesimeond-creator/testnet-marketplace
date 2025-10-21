@@ -1,0 +1,20 @@
+# Project Plan – Testnet Marketplace
+
+## Objective
+Build a platform that helps users discover active testnets, track project rewards, and trade testnet tokens securely using Zama’s FHEVM.
+
+## Core Features
+- Testnet directory and discovery hub
+- Token listing and exchange page
+- Encrypted wallet balance tracking
+- On-chain privacy protection using FHE
+
+## Milestones
+1. Draft architecture and smart contract structure
+2. Prototype user dashboard
+3. Connect testnet APIs
+4. Explore privacy integrations via Zama FHEVM
+5. Launch MVP and invite contributors
+
+## Tech Focus
+FHEVM + Solidity + simple data frontend (optional)
