@@ -30,3 +30,9 @@ To simplify testnet participation while creating an economy for early adopters �
 
 ### 💡 About
 This project started as part of the **Zama Developer Program**, exploring how **Fully Homomorphic Encryption (FHE)** can enable new Web3 economies around testnets.
+### 🛠️ Repository Structure
+This repository includes:
+- README.md (overview)
+- PROJECT-PLAN.md (development milestones)
+- CONTRIBUTORS.md (team info)
+- IDEAS.md (concept notes)
