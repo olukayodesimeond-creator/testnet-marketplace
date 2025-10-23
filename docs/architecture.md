@@ -1,54 +1,63 @@
-<img width="1536" height="1024" alt="1000093381" src="https://github.com/user-attachments/assets/5e3dd34f-9db3-4b2a-a07e-a1cdc4ebe94b" />
-# 🧩 Testnet Marketplace Architecture
+# 🧩 TestnetX Architecture (Merged: Marketplace + ACE + $TESTX)
 
 ## 1. Core Idea
 
-A Testnet Marketplace where:
+A Testnet Marketplace and Intelligence Hub where:
 
-- Users can buy and sell testnet tokens securely.  
-- They can also discover ongoing and upcoming testnets for farming or airdrops.  
-- The platform rewards participation and reputation growth.  
+- Users can buy, sell, swap, and burn testnet tokens and NFTs.  
+- Users discover, research, and publish original testnet findings.  
+- Contributions, trade volume, and verified activity are measured as **ACE**, a non-transferable ranking metric.  
+- Platform token **$TESTX** is the utility and reward token distributed according to activity, multipliers and staking.
 
 ---
 
 ## ⚙️ 2. Updated Architecture Overview
 
 | Layer | Description | Tools / Options |
-|-------|--------------|----------------|
+|-------|-------------|-----------------|
 | **Frontend (UI)** | User interface for listings, wallet connection, dashboard | Next.js + TailwindCSS + Wagmi + RainbowKit + Base App + Rabby |
-| **Smart Contracts** | Handles listing, escrow, and trades | Solidity + Hardhat or Foundry |
-| **Backend / Indexer** | Tracks marketplace data, prices, and user activity | Node.js (Express) + PostgreSQL / MongoDB |
-| **Blockchain Layer** | Base chain for primary interactions + optional Monad testnet | Base Testnet / Sepolia / Monad |
-| **Data Aggregation Layer** | Aggregates live testnet data from APIs (Kaito, Zama, Airdrops.io, etc.) | Custom API endpoints |
-| **Privacy Layer** | FHE-enabled transactions using Zama’s fhevm | Zama AI SDK |
-| **AI Layer (Optional)** | Summarizes testnet projects, user patterns, and recommendations | Kaito API + OpenAI API |
+| **Smart Contracts** | Listing, swap, escrow, NFT burn, prediction market logic | Solidity + Hardhat / Foundry + OpenZeppelin |
+| **Backend / Indexer** | Tracks marketplace, submissions, ACE, $TESTX emissions | Node.js (Express) + PostgreSQL / MongoDB |
+| **Blockchain Layer** | Primary on-chain execution and testnet interactions | Base Testnet / Sepolia / Monad |
+| **Data Aggregation Layer** | Aggregates testnet signals, airdrops, analytics | Kaito, Zama, Airdrops.io APIs |
+| **Privacy Layer** | Private computation and encrypted state handling | Zama FHEVM (Zama SDK) |
+| **Reputation Layer (ACE Engine)** | Scores contributions, reputation, and tier logic | Kaito AI + on-chain scoring contracts |
+| **Token Layer** | $TESTX liquidity, staking, and governance | ERC20 or similar, emissions controlled by smart contracts |
+| **AI Layer (Optional)** | Recommends testnets and analyzes originality | Kaito API + OpenAI |
 
 ---
 
 ## 🧠 3. Wallet Integration
 
-You’ll support three wallet types for flexibility and security:
+Supported wallets for onboarding and power users:
 
 ### a. Base App (Base Wallet)
-- Default onboarding path for new users.  
-- Built-in fiat-to-crypto bridge.  
-- Native support for Base chain (main + testnet).  
+- Default onboarding for new users.  
+- Built-in fiat-crypto bridge.  
+- Native Base chain support.
 
 ### b. Rabby Wallet
-- For advanced Web3 users.  
-- One-click chain switching and better DApp connection.  
-- Perfect for multi-chain testnet hunters.  
+- Advanced user features.  
+- Quick chain switching and DApp UX improvements.
 
 ### c. RainbowKit / Wagmi
-- Provides unified wallet connection logic.  
-- Easy integration with MetaMask, Coinbase Wallet, and others.  
-- Simplifies wallet authentication on frontend.  
+- Unified connection experience (MetaMask, Coinbase Wallet etc).
 
 **Example Wallet Setup Code:**
 
 ```js
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { rabbyWallet, metaMaskWallet, baseWallet } from '@rainbow-me/rainbowkit/wallets';
+
+// Example setup
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [rabbyWallet({ chains }), metaMaskWallet({ chains }), baseWallet({ chains })],
+  },
+]);
+
+export default connectors;
 ```
 🏗️ 4. Key Functional Modules
 
@@ -56,38 +65,52 @@ a. User Module
 
 Connect wallet (Base / Rabby / MetaMask)
 
-Profile setup + wallet verification
+Profile creation, SBT or soulbound record for verified identity
 
-XP, badges, on-chain reputation
-
-
-b. Marketplace
-
-List testnet tokens for sale
-
-Escrow smart contract (holds until buyer confirms)
-
-Buy, claim, and dispute resolution
-
-Private listings (FHE encrypted)
+ACE score display, XP, badges, tier view
 
 
-c. Testnet Discovery
+b. Marketplace Module
 
-Aggregated list of projects running testnets
+List testnet tokens and NFTs
 
-Filter by category, reward, or chain
+Escrow smart contracts for trades
 
-One-click to join testnet or faucet
+Swap engine and liquidity pools for testnet pairs
+
+Burn-for-reward flows for NFTs with bridge attestation
 
 
-d. Escrow + Payment Logic
+c. Testnet Discovery & Research Module
 
-Smart contract-based escrow
+Submit discovery reports and research posts
 
-Multi-chain (Base, Monad)
+IPFS storage or Lens integration for content persistence
 
-Optional Zama encryption for amounts
+Community + AI originality scoring pipeline
+
+
+d. Prediction / Event Markets Module
+
+Create prediction events using testnet tokens
+
+Settlement via oracles (Chainlink or custom)
+
+Note: identity verification is anti-bot, not for enabling betting
+
+
+e. Identity & Anti-Bot Module
+
+Human verification options: zkID, Worldcoin, or facial attestations via privacy-preserving proofs
+
+Zama FHE used to encrypt and compute verification proofs without leaking raw biometric data
+
+
+f. Reputation, Rewards & ACE Engine
+
+ACE is calculated from verified actions (swaps, burns, accuracy, research originality, LP time)
+
+ACE is non-transferable and defines tiered multipliers for $TESTX rewards
 
 
 
@@ -95,14 +118,13 @@ Optional Zama encryption for amounts
 
 🔐 5. Privacy & FHE Integration (Zama)
 
-Zama’s fhevm lets you encrypt listings and trade data while keeping it functional.
-Use it to:
+Zama FHEVM is used to:
 
-Hide trade amounts
+Encrypt trade amounts, balances and sensitive user info while enabling on-chain logic
 
-Protect user balances
+Compute contribution scoring or verification checks privately
 
-Perform verifiable encrypted operations
+Store or compute biometric verification proofs without exposing raw data
 
 
 Example Solidity Snippet:
@@ -110,69 +132,110 @@ Example Solidity Snippet:
 import "fhevm/lib/FHE.sol";
 
 uint256 encryptedPrice = FHE.encrypt(0.2 ether);
-FHE.decrypt(encryptedPrice); // only contract can access
+uint256 decrypted = FHE.decrypt(encryptedPrice); // accessible to contracts with correct keys
 
 
 ---
 
-🚀 6. MVP Rollout Plan
+🧾 6. ACE and $TESTX Tokenomics (High level)
+
+ACE (ranking metric)
+
+Non-transferable on-chain reputation.
+
+Earned via verified actions:
+
+Swap volume and bridges: volume-weighted ACE
+
+NFT burns: burn-weighted ACE
+
+Prediction accuracy: accuracy-weighted ACE
+
+Research submissions: originality-weighted ACE (AI + community validation)
+
+LP staking: time-weighted ACE
+
+
+ACE decays slowly with inactivity to keep rankings fresh.
+
+ACE determines tier and $TESTX multipliers.
+
+
+$TESTX (platform token)
+
+ERC20 utility / governance token
+
+Emission sources:
+
+Swap fees redistribution
+
+Reward pool for verified research and curated discoveries
+
+Liquidity mining and staking rewards
+
+
+ACE multiplies $TESTX earning rate per activity
+
+$TESTX used for: marketplace fees, staking, governance votes, and unlocking premium features
+
+
+
+---
+
+🚀 7. MVP Rollout Plan
 
 Phase 1 (MVP)
 
-UI (Next.js + Wagmi + Base/Rabby)
+Basic frontend listing UI + wallet connections (Base, Rabby)
 
-Smart contracts (listing + escrow)
+Simple marketplace: list, buy, escrow, basic swaps on a testnet
 
-Backend (data + API)
-
-Basic testnet listing dashboard
+Off-chain backend for tracking listings and basic ACE points
 
 
 Phase 2
 
-Add Zama FHE privacy
+Integrate Zama FHE for private listings and encrypted balances
 
-Integrate AI testnet recommendations
+Research submission flow with AI originality checks
 
-Launch user XP and reputation scoring
+$TESTX reward mechanics and initial ACE tier system
 
 
 Phase 3
 
-DAO governance + staking rewards
+Prediction engine and oracle integration
 
-Base-native token economy
+Burn-to-real-reward bridge partnerships
 
-Cross-chain integration (Monad, Polygon, etc.)
-
-
-
----
-
-🧰 7. No-Code / Low-Code Stack (Optional)
-
-If you don’t code, use this combo:
-
-Thirdweb for contract deployment
-
-Moralis for wallet auth + testnet data
-
-Bubble.io or Typedream for frontend
-
-Replit + ChatGPT for smart contract scaffolding
-
-Zama Sandbox for FHE simulation
+DAO governance and full $TESTX tokenomics rollout
 
 
 
 ---
 
-🪙 Supported Wallets
+🧰 8. No-Code / Low-Code Options (if you want to prototype fast)
+
+Thirdweb for contract scaffolding and deployments
+
+Moralis for wallet auth and quick APIs
+
+Bubble.io for a frontend prototype
+
+Replit + ChatGPT for quick contract/code generation
+
+Zama Sandbox for testing FHE features
+
+
+
+---
+
+🪙 9. Supported Wallets (summary)
 
 Base App
 
 Rabby Wallet
 
-MetaMask (via Wagmi/RainbowKit)
+MetaMask (via Wagmi / RainbowKit)
 
-Coinbase Wallet
+Coinbase Wallet<img width="1536" height="1024" alt="1000095369" src="https://github.com/user-attachments/assets/3845ce9d-d348-4135-899a-f8e789fe3629" />
